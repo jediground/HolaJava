@@ -53,15 +53,15 @@ class LazySingleton {
 }
 
 // <<Effective Java>> preferred
-class LazySingletonPrefreferred {
+class LazySingletonPreferred {
 	
-	private LazySingletonPrefreferred() {}
+	private LazySingletonPreferred() {}
 	
 	private static class LazySingletonHoler {
-		private static final LazySingletonPrefreferred sharedIntance = new LazySingletonPrefreferred();
+		private static final LazySingletonPreferred sharedIntance = new LazySingletonPreferred();
 	}
 	
-	public LazySingletonPrefreferred getInstance() {
+	public LazySingletonPreferred getInstance() {
 		return LazySingletonHoler.sharedIntance;
 	}
 }
