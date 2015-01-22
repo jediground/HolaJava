@@ -1,0 +1,18 @@
+set nu
+set ts=4
+set tw=80
+set vb
+set shiftwidth=4
+set hls
+set showmatch
+:syntax on
+
+syntax enable
+set background=dark
+colorscheme solarized
+
+if has('gui_running')
+    set background=light
+else
+    set background=dark
+endif
