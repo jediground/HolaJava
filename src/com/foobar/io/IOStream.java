@@ -24,54 +24,48 @@ import org.junit.Test;
 // RandomAccessFile
 
 public class IOStream {
-	private static final String FILE_SEPARATOR = System.getProperty("file.separator");
-	
-	public IOStream() {
-	}
+    private static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
-	public static void main(String[] args) {
-		System.out.println(FILE_SEPARATOR);
-		System.out.println(System.getProperties());
-	}
+    public IOStream() {
+    }
 
-	@Test
-	public void testFileStream() {
-		
-	}
-	
-	@Test
-	public void testBufferedStream() {
-		
-	}
-	
-	@Test
-	public void testIOPutStream() {
-		
-	}
-	
-	@Test
-	public void testPrintStream() {
-		
-	}
-	
-	@Test
-	public void testDataStream() {
+    public static void main(String[] args) {
+        System.out.println(FILE_SEPARATOR);
+        System.out.println(System.getProperties());
+    }
 
-	}
-	
-	@Test 
-	public void testObjectStream() {
-		
-	}
-	
-	@Test
-	public void testRandomAccessFileStream() {
-		
-	}
+    @Test
+    public void testFileStream() {
+
+    }
+
+    @Test
+    public void testBufferedStream() {
+
+    }
+
+    @Test
+    public void testIOPutStream() {
+
+    }
+
+    @Test
+    public void testPrintStream() {
+
+    }
+
+    @Test
+    public void testDataStream() {
+
+    }
+
+    @Test
+    public void testObjectStream() {
+
+    }
+
+    @Test
+    public void testRandomAccessFileStream() {
+
+    }
 }
-
-
-
-
-
-
