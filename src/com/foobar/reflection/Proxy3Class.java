@@ -8,31 +8,33 @@ import java.util.Map;
 
 public class Proxy3Class {
     public static void main(String[] args) {
-        Service target = new ServiceImp();
-        Service proxy = new ServiceProxy(target).getServiceProxy();
         
-        System.out.println(((ServiceImp) target).getPersons());
+        ServiceImp target = new ServiceImp();                 
+        Service proxy = new Binder(target).getServiceProxy(); 
+        
+        System.out.println(target.getPersons());
+        // 实际操作的是 target 的方法和数据，target为真实「跑腿」的对象，属于委托任务的接受者，执行者
         proxy.add(new Person(1003, "Matt"));
-        System.out.println(((ServiceImp) target).getPersons());
+        System.out.println(target.getPersons());
         
-        System.out.println(((ServiceImp) target).getPersons());
+        System.out.println(target.getPersons());
         proxy.update(new Person(1003, "Mary"));
-        System.out.println(((ServiceImp) target).getPersons());
+        System.out.println(target.getPersons());
         
-        System.out.println(((ServiceImp) target).getPersons());
+        System.out.println(target.getPersons());
         proxy.delete(1002);
-        System.out.println(((ServiceImp) target).getPersons());
+        System.out.println(target.getPersons());
         
-        System.out.println(((ServiceImp) target).getPersons());
+        System.out.println(target.getPersons());
         proxy.delete(1001);
-        System.out.println(((ServiceImp) target).getPersons());
+        System.out.println(target.getPersons());
     }
 }
 
-class ServiceProxy {
+class Binder {
     private Service target;
     
-    public ServiceProxy(Service target) {
+    public Binder(Service target) {
         this.target = target;
     }
 
