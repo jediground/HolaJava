@@ -10,9 +10,9 @@ import java.net.Socket;
 import org.junit.Test;
 
 public class SocketClass {
-
     // 客户端
     @Test
+
     public void testclient() {
         Socket socket = null;
         OutputStream os = null;
@@ -24,7 +24,6 @@ public class SocketClass {
             // 3.具体的输出过程
             os.write("我是客户端，请多关照".getBytes());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             // 4.关闭相应的流和Socket对象
@@ -32,7 +31,6 @@ public class SocketClass {
                 try {
                     os.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 
@@ -106,11 +104,11 @@ public class SocketClass {
             }
         }
     }
-    
+
     public SocketClass() {
-        
+
     }
-    
+
     @Test
     public void client() {
         Socket socket = null;
@@ -139,20 +137,20 @@ public class SocketClass {
             }
         }
     }
-    
+
     @Test
     public void server() {
         System.out.println("Server runing...");
-        
+
         ServerSocket ss = null;
-        Socket socket = null; 
+        Socket socket = null;
         InputStream is = null;
-        
+
         try {
             ss = new ServerSocket(9090);
             socket = ss.accept();
             is = socket.getInputStream();
-            
+
             byte[] by = new byte[20];
             int len;
             while (-1 != (len = is.read(by))) {

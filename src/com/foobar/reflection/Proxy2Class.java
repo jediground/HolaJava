@@ -30,7 +30,7 @@ public class Proxy2Class {
     
     @Test
     public void testProxy() {
-        CounterLow low = new CounterLow();
+        final CounterLow low = new CounterLow();
         
         ClassLoader loader = CounterLow.class.getClassLoader();
         Class<?>[] interfaces = CounterLow.class.getInterfaces();
