@@ -93,7 +93,7 @@ public class ReflectionUtils {
         return result;
     }
 
-    public static void setFieldValue(Object object, String fieldName, Object value) {
+    public static <T> void setFieldValue(T object, String fieldName, Object value) {
         Field field = getDeclaredField(object, fieldName);
         if (null == field) {
             throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + object + "]");

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="commons-beanutils:commons-beanutils-bean-collections:1.8.3" type="repository">
+    <properties maven-id="commons-beanutils:commons-beanutils-bean-collections:1.8.3" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/commons-beanutils/commons-beanutils-bean-collections/1.8.3/commons-beanutils-bean-collections-1.8.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -2,9 +2,7 @@ package com.foobar.utils;
 
 import java.io.InputStream;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by Moch on 2/1/15.
@@ -87,13 +85,21 @@ public class JDBCUtils {
     }
 
     public static <T> T query(Class<T> clazz, String sql, Object... args) {
-        T entity = null;
+        List<T> list = queryForList(clazz, sql, args);
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+
+        return null;
+    }
+
+    public static <T> List<T> queryForList(Class<T> clazz, String sql, Object... args) {
+        List<T> list = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
-            // 1. get resultSet object
             connection = getConnection();
             preparedStatement = connection.prepareStatement(sql);
             for (int i = 0; i < args.length; i++) {
@@ -101,29 +107,78 @@ public class JDBCUtils {
             }
             resultSet = preparedStatement.executeQuery();
 
-            // 2. get ResultSetMetaData object
-            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            List<Map<String, Object>> pairs = handleResultSet(resultSet);
 
-            // 3. Create Map<Stirng, Object>, key: column alias, value: column value
-            Map<String, Object> pairs = new HashMap<String, Object>();
+            list = convertMapListToBeanList(clazz, pairs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            release(resultSet, preparedStatement, connection);
+        }
 
-            // 4. handle result set
-            if (resultSet.next()) {
-                for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
-                    String columnLabel = resultSetMetaData.getColumnLabel(i + 1);
-                    Object columnValue = resultSet.getObject(i + 1);
-                    pairs.put(columnLabel, columnValue);
-                }
+        return list;
+    }
+
+    private static List<Map<String, Object>> handleResultSet(ResultSet resultSet) throws SQLException {
+        List<Map<String, Object>> pairs = new ArrayList<Map<String, Object>>();
+        List<String> columnLabels = getColumnLabels(resultSet);
+        Map<String, Object> map = null;
+        while (resultSet.next()) {
+            map = new HashMap<String, Object>();
+            for (String columnLabel: columnLabels) {
+                map.put(columnLabel, resultSet.getObject(columnLabel));
             }
+            pairs.add(map);
+        }
 
-            // 5. Create new instance if needed
-            if (pairs.size() > 0) {
-                entity = clazz.newInstance();
-                for (Map.Entry<String, Object> entry: pairs.entrySet()) {
-                    String fieldName = entry.getKey();
-                    Object value = entry.getValue();
-                    ReflectionUtils.setFieldValue(entity, fieldName, value);
-                }
+        return pairs;
+    }
+
+    private static List<String> getColumnLabels(ResultSet resultSet) throws SQLException {
+        List<String> columnLabels = new ArrayList<String>();
+        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+        for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
+            columnLabels.add(resultSetMetaData.getColumnLabel(i + 1));
+        }
+
+        return columnLabels;
+    }
+
+    private static <T> T convertMapToBean(Class<T> clazz, Map<String, Object>map) throws IllegalAccessException, InstantiationException {
+        T bean = clazz.newInstance();
+        for (Map.Entry<String, Object> entry: map.entrySet()) {
+            ReflectionUtils.setFieldValue(bean, entry.getKey(), entry.getValue());
+        }
+        return bean;
+    }
+
+    private static <T> List<T> convertMapListToBeanList(Class<T> clazz, List<Map<String, Object>>mapList) throws InstantiationException, IllegalAccessException {
+        List<T> result = new ArrayList<T>();
+        if (mapList.size() > 0) {
+            for (Map<String, Object> map : mapList) {
+                result.add(convertMapToBean(clazz, map));
+            }
+        }
+
+        return result;
+    }
+
+    // 返回某条记录的某一个字段的值或一个统计的值
+    public static <E> E getValue(String sql, Object... args) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            for (int i = 0; i < args.length; i++) {
+                preparedStatement.setObject(i + 1, args[i]);
+            }
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return (E) resultSet.getObject(1);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,6 +186,7 @@ public class JDBCUtils {
             release(resultSet, preparedStatement, connection);
         }
 
-        return entity;
+        return null;
     }
+
 }
